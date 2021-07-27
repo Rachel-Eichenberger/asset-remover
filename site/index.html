@@ -1,0 +1,137 @@
+<html>
+  <head>
+    <title>Uniswap V3 Helper</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
+	<!-- <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+	<link rel="manifest" href="../site.webmanifest">
+	<link rel="mask-icon" href="../safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff"> -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Get some bootstrap default styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  
+  <style>
+
+  .toggle {position : relative ;display : inline-block;width : 88px;height : 28px;background-color: red;border-radius: 30px;border: 2px solid gray;}   
+  .toggle:after {content: '';position: absolute;width: 38px;height: 38px;background-color: gray;top: -5px;left: 1px;transition:  all 0.5s; style="display: none";border-radius: 20px;}
+  .checkbox:checked + .toggle::after {left : 39px;border-radius: 20px;}
+  .checkbox:checked + .toggle {background-color: green;border-radius: 20px;} 
+  .checkbox {display : none;}
+
+  .toggle2 {position : relative ;display : inline-block;width : 88px;height : 28px;background-color: red;border-radius: 30px;border: 2px solid gray;}   
+  .toggle2:after {content: '';position: absolute;width: 38px;height: 38px;background-color: gray;top: -5px;left: 1px;transition:  all 0.5s; style="display: none";border-radius: 20px;}
+  .checkbox2:checked + .toggle2::after {left : 39px;border-radius: 20px;}
+  .checkbox2:checked + .toggle2 {background-color: green;border-radius: 20px;} 
+  .checkbox2 {display : none;}
+  
+  p {font-size:19px}
+  a {color:black;}
+  </style>
+  
+  <body class="w3-pink">
+    <!-- Construct a Bootstrap layout -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Uniswap V3 Helper</h1>
+
+
+
+          <div id="prepare">
+            <button class="btn btn-primary" id="btn-connect">
+              Connect wallet
+            </button>
+          </div>
+
+          <div id="connected" style="display: none">
+
+				<button class="btn btn-primary" id="btn-disconnect">
+				  Disconnect wallet
+				</button>
+				
+				<p style="font-size:13px;">Your Wallet</p>
+				<p style="color:black;font-size:13px;" id="Uwallet"></p>
+
+				<hr>
+
+				<div>
+					<p> Transfer V3 LP NFT</p>
+					<p>TO : 
+					<input id="SendTo" type="text" style="width:420px;color:black;" placeholder="To Address">&nbsp;&nbsp; ID to Transfer
+					<input id="NftID"  type="text" style="width:88px;color:black;" placeholder="NFT ID">
+					<button class="btn btn-primary" id="transferNFT">
+					Transfer
+					</button>
+					</p>
+					
+					<p>
+					<button class="btn btn-primary" id="getNFT">
+					Get NFT IDs
+					</button>
+					</p>
+					<p id="IDs"></p>
+					<p id="hash"></p>
+					
+				</div>
+				
+				<hr>
+				
+				<div align="center">
+					<p>Remove Single LP Asset (designed to remove AMPL V3 LQ asset 2) :  This Tool Holds no guarantees, Highly Experimental, and irreversible.</p>
+					<p><u>This Will Close your entire position causing an irreversible loss of the AMPL This tool moves your liquidity to fees owed at current pool levels</u></p>
+					<p>This tool includes a 10% fee, as this took a fair amount of time to figure out and to cover costs of smart contract, dapp build and all</p>
+					<p>Enter your Token ID in the box below, if you need a list of your NFTs click Get NFT IDs ^ above</p>
+					<div style="color:black;background-color:white;width:13%;padding:10px;">
+						<p>Get ETH<br>(only for weth)</p>
+						<input type="checkbox" id="switch" class="checkbox" />
+						<label for="switch" class="toggle">	 
+						<p>ON    OFF</p>
+					</div>
+					<div style="color:black;background-color:white;width:13%;padding:10px;">
+						<p>Return NFT</p>
+						<input type="checkbox" id="switch2" class="checkbox2" checked>
+						<label for="switch2" class="toggle2">
+						<p>ON    OFF</p>
+					</div>
+					<br>
+					<input id="ANftID"  type="text" style="width:88px;color:black;" placeholder="NFT ID">
+					<div id="trigger">
+						<button class="btn btn-primary" id="NFTburner">Approve</button>
+					</div>
+					<p id="owner"></p>
+					<p id="EMG"></p>
+					<p id="TokenInp"></p>
+					<p id="posit"></p>
+					<p id="hash2"></p>
+          </div>
+
+          <br>
+
+        </div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript" src="https://unpkg.com/web3@1.2.11/dist/web3.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/web3modal@1.9.0/dist/index.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/fortmatic@2.0.6/dist/fortmatic.js"></script>
+    <script type="text/javascript" src="./scripts/Web3Modaljs.js"></script>
+	<script type="text/javascript">
+	const Tnm = document.getElementById('ANftID');
+	Tnm.addEventListener('input', () => {
+		NFTLoad();
+	});
+	</script>
+  </body>
+</html>
